@@ -1,0 +1,44 @@
+[
+    {
+        "testName": "Try to sign in without a password",
+        "username": "NikolayLN",
+        "password": null,
+        "message": "Password cannot be blank.",
+        "secondMessage": null
+    },
+    {
+        "testName": "Try to sign in without a username",
+        "username": "",
+        "password": "QNsbryvRrwUkgR8k",
+        "message": "Username cannot be blank.",
+        "secondMessage": null
+    },
+    {
+        "testName": "Try to sign in without username and password",
+        "username": null,
+        "password": null,
+        "message": "Password cannot be blank.",
+        "secondMessage": "Username cannot be blank."
+    },
+    {
+        "testName": "Try to sign in with wrong username",
+        "username": "NikolayLN-wrong",
+        "password": "parola",
+        "message": "Incorrect username or password.",
+        "secondMessage": null
+    },
+    {
+        "testName": "Try to sign in with wrong password",
+        "username": "NikolayLN",
+        "password": "wrongpassword",
+        "message": "Incorrect username or password.",
+        "secondMessage": null
+    },
+    {
+        "testName": "Try to sign in with wrong and short password",
+        "username": "NikolayLN",
+        "password": "123",
+        "message": "Incorrect username or password.",
+        "secondMessage": null
+    }
+]
