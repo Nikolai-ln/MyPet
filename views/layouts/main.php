@@ -40,6 +40,9 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
+            !Yii::$app->user->isGuest ?
+            ['label' => 'Users', 'url' => ['/user/index'], 'options' => ['data-cy' => 'navbar-users-btn']]
+            : '',
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login'], 'options' => ['data-cy' => 'navbar-login-btn']]
             ) : (
