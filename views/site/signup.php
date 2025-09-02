@@ -8,9 +8,32 @@ use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 
 $this->title = 'Sign Up';
-$this->params['breadcrumbs'][] = $this->title;
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
+<style>
+    body {
+      background-image: url('<?= Yii::$app->request->baseUrl ?>/images/IMG_20220904_135713.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .overlay-text {
+        position: absolute;
+        top: 15%;
+        left: 21%;
+        transform: translate(-20%, -20%);
+        color: white;
+        font-size: 36px;
+        font-weight: bold;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+    }
+    .site-login {
+        background: rgba(255,255,255,0.8);
+        padding: 20px;
+        border-radius: 10px;
+    }
+</style>
+<div class="col-md-6 site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>Please fill out the following fields to Sign Up:</p>
@@ -19,8 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'id' => 'signup-form',
         'layout' => 'horizontal',
         'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
+            'template' => "{label}\n<div class=\"col-lg-5\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
+            'labelOptions' => ['class' => 'col-lg-2 control-label'],
         ],
     ]); ?>
 

@@ -8,9 +8,33 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 
 $this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
+<style>
+    body {
+      background-image: url('<?= Yii::$app->request->baseUrl ?>/images/IMG_20220904_135713.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .overlay-text {
+        position: absolute;
+        top: 15%;
+        left: 21%;
+        transform: translate(-20%, -20%);
+        color: white;
+        font-size: 36px;
+        font-weight: bold;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+    }
+    .site-login {
+        background: rgba(255,255,255,0.8);
+        /*color: white;*/
+        padding: 20px;
+        border-radius: 10px;
+    }
+  </style>
+<div class="col-md-6 site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>Please fill out the following fields to login:</p>
@@ -21,9 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'options' => ['data-cy' => 'login-form'],
         'fieldConfig' => [
             'template' => "{label}\n{input}\n{error}",
-            'labelOptions' => ['class' => 'col-lg-1 col-form-label mr-lg-3'],
-            'inputOptions' => ['class' => 'col-lg-3 form-control'],
-            'errorOptions' => ['class' => 'col-lg-7 invalid-feedback']
+            'labelOptions' => ['class' => 'col-form-label mr-lg-3'],
+            'inputOptions' => ['class' => 'col-lg-5 form-control'],
+            'errorOptions' => ['class' => 'invalid-feedback']
         ],
     ]); ?>
 
@@ -32,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'password')->passwordInput(['data-cy' => 'login-password']) ?>
 
         <?= $form->field($model, 'rememberMe')->checkbox([
-            'template' => "<div class=\"offset-lg-1 col-lg-3 custom-control custom-checkbox\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
+            'template' => "<div class=\"offset-lg-1 col-lg-5 custom-control custom-checkbox\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
             'inputOptions' => ['data-cy' => 'login-rememberMe-checkbox']]) ?>
 
         <div class="form-group">
