@@ -19,7 +19,7 @@ describe('Test 1 - Login tests', { defaultCommandTimeout: 5000 }, () => {
 
   userData.forEach((user) => {
     it(user.testName, () => { // 'Try to sign in with wrong or missing credentials'
-      cy.visit('/login');
+      cy.visit('/site/login');
       cy.SignIn(user.username, user.password);
       cy.contains(user.message).should('be.visible');
       if (user.secondMessage)
@@ -28,14 +28,14 @@ describe('Test 1 - Login tests', { defaultCommandTimeout: 5000 }, () => {
   });
 
   it('Sign in', { retries: { runMode: 1, openMode: 1 } }, () => {
-      cy.visit('/login');
+      cy.visit('/site/login');
 
       cy.fixture('userDetails').then((user) => {
         cy.SignIn(user.username, user.password);
       });
 
       cy.url({ timeout: 10000 })
-        .should('not.include', '/login');
+        .should('not.include', '/site/login');
 
       navbar.logout().should('be.visible');
     });

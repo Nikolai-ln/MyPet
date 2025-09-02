@@ -11,8 +11,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        This is the About page. You may modify the following file to customize its content:
+        🐶 That is your digital pet passport! 🐱
+    </p>
+    <p>
+        You can also store your photos there. Enjoy! 🐰
     </p>
 
-    <code><?= __FILE__ ?></code>
 </div>

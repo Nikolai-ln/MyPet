@@ -10,7 +10,7 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    baseUrl: 'http://localhost/MyPet/web/site/',
+    baseUrl: 'http://localhost/MyPet/web/',
     specPattern: 'cypress/e2e/**/*.{js,mjs,jsx,ts,tsx}',
     supportFile: 'cypress/support/e2e.js',
     testIsolation: false,
