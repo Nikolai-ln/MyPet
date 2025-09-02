@@ -12,6 +12,7 @@ class SignupForm extends Model
     public $username;
     public $password;
     public $password_repeat;
+    private $_user = null;
 
     public function rules()
     {
@@ -24,25 +25,42 @@ class SignupForm extends Model
     }
     public function signup($attribute = null)
     {
+
+        if (!$this->validate()) {
+            return null;
+        }
+
         $user = new User();
         $user->username = $this->username;
-        $user->password = \Yii::$app->security->generatePasswordHash($this->password);
+        $user->password = $this->password;
+        $user->role = 'user';
         //$user->access_token = \Yii::$app->security->generateRandomString();
 
         if (User::find()->where(['username' => $user->username])->one() == true)
         {
-            \Yii::error(message, "User was not saved!1 ". VarDumper::dumpAsString($user->errors));
-            // $this->addError($attribute, 'User with the same username already exists! ');
-            return false;
+            // \Yii::error(message, "User was not saved!1 ". VarDumper::dumpAsString($user->errors));
+            $this->addError($attribute, 'User with the same username already exists! ');
+            return null;
         }
+
+        $user = new User();
+        $user->username = $this->username;
+        $user->password = $this->password;
+        $user->role = 'user';
 
         if($user->save())
         {
-            return true;
+            $this->_user = $user;
+            return $user;
         }
         
         \Yii::error(message, "User was not saved! ". VarDumper::dumpAsString($user->errors));
-        return false;
+        return null;
+    }
+
+    public function getUser()
+    {
+        return $this->_user;
     }
 
     /**

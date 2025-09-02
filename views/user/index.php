@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'user_id',
             'username',
             // 'password',
+            'role',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {

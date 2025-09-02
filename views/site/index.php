@@ -11,7 +11,19 @@ $this->title = 'My Pet Application';
       background-repeat: no-repeat;
       background-position: center;
     }
+    .overlay-text {
+        position: absolute;
+        top: 15%;
+        left: 21%;
+        transform: translate(-20%, -20%);
+        color: white;
+        font-size: 36px;
+        font-weight: bold;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+    }
   </style>
 <div class="site-index">
-
+    <div class="overlay-text">
+        Welcome to My Pet Application! 🐾
+    </div>
 </div>

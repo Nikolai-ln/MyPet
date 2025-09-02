@@ -3,6 +3,7 @@
 namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -36,6 +37,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             [['password'], 'required', 'on' => 'create'],
             [['username'], 'string', 'max' => 55],
             [['password'], 'string', 'max' => 255],
+            [['role'], 'in', 'range' => ['user', 'admin']],
         ];
     }
 
@@ -48,6 +50,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
             'user_id' => 'User ID',
             'username' => 'Username',
             'password' => 'Password',
+            'role' => 'Role',
         ];
     }
 
@@ -63,6 +66,11 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     {
         return self::find()->where(['user_id' => $id])->one();
         //return self::findOne($id);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
     }
 
     /**
@@ -126,19 +134,19 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     }
 
     public function beforeSave($insert)
-{
-    if (parent::beforeSave($insert)) {
+    {
+        if (parent::beforeSave($insert)) {
 
-        if (!empty($this->password)) {
-            $this->password = Yii::$app->security->generatePasswordHash($this->password);
-        } else {
-            if (!$insert) {
-                $this->password = $this->getOldAttribute('password');
+            if (!empty($this->password)) {
+                $this->password = Yii::$app->security->generatePasswordHash($this->password);
+            } else {
+                if (!$insert) {
+                    $this->password = $this->getOldAttribute('password');
+                }
             }
-        }
 
-        return true;
+            return true;
+        }
+        return false;
     }
-    return false;
-}
 }

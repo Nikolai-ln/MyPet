@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\User;
 use app\models\UserSearch;
 use yii\web\Controller;
@@ -29,6 +30,9 @@ class UserController extends Controller
                         [
                             'allow' => true,
                             'roles' => ['@'],
+                            'matchCallback' => function ($rule, $action) {
+                                return !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin();
+                            }
                         ],
                     ],
                 ],
@@ -123,8 +127,12 @@ class UserController extends Controller
      */
     public function actionDelete($user_id)
     {
-        $this->findModel($user_id)->delete();
+        if ($user_id == Yii::$app->user->id) {
+            Yii::$app->session->setFlash('error', 'You cannot delete yourself!');
+            return $this->redirect(['index']);
+        }
 
+        $this->findModel($user_id)->delete();
         return $this->redirect(['index']);
     }
 
