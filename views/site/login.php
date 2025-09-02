@@ -47,7 +47,7 @@ $this->title = 'Login';
             'template' => "{label}\n{input}\n{error}",
             'labelOptions' => ['class' => 'col-form-label mr-lg-3'],
             'inputOptions' => ['class' => 'col-lg-5 form-control'],
-            'errorOptions' => ['class' => 'invalid-feedback']
+            'errorOptions' => ['class' => 'col-lg-7 invalid-feedback']
         ],
     ]); ?>
 
