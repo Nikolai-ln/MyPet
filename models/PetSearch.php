@@ -56,6 +56,10 @@ class PetSearch extends Pet
             return $dataProvider;
         }
 
+        if (Yii::$app->user->identity->role !== 'admin') {
+            $query->andWhere(['user_id' => Yii::$app->user->id]);
+        }
+
         // grid filtering conditions
         $query->andFilterWhere([
             'pet_id' => $this->pet_id,

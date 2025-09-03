@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use Yii;
 
 /**
  * PetController implements the CRUD actions for Pet model.
@@ -49,8 +50,16 @@ class PetController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->user->identity->role === 'admin') {
+            $query = Pet::find();
+        } else {
+            $query = Pet::find()->where(['user_id' => Yii::$app->user->id]);
+        }
+
         $searchModel = new PetSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => $query,
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -81,8 +90,16 @@ class PetController extends Controller
         $model = new Pet();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'pet_id' => $model->pet_id]);
+            if ($model->load($this->request->post())) {
+
+                // if the user is not an admin we would link the current user
+                if (Yii::$app->user->identity->role !== 'admin') {
+                    $model->user_id = Yii::$app->user->id;
+                }
+
+                if ($model->save()) {
+                    return $this->redirect(['view', 'pet_id' => $model->pet_id]);
+                }
             }
         } else {
             $model->loadDefaultValues();

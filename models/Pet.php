@@ -60,9 +60,9 @@ class Pet extends \yii\db\ActiveRecord
             'breed' => 'Breed',
             'date_of_birth' => 'Date Of Birth',
             'information' => 'Information',
-            'owner' => 'Owner',
+            'owner' => 'Owner names',
             'address' => 'Address',
-            'user_id' => 'User ID',
+            'user_id' => 'Owner username',
         ];
     }
 
