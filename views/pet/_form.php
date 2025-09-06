@@ -28,6 +28,10 @@ use app\models\User;
 
     <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'phone_number')->textInput(['maxlength' => true]) ?>
+
     <?php if (Yii::$app->user->identity->role === 'admin'): ?>
         <?= $form->field($model, 'user_id')->dropDownList(
             ArrayHelper::map(User::find()->all(), 'user_id', 'username'),

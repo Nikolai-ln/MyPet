@@ -44,6 +44,9 @@ class Pet extends \yii\db\ActiveRecord
             [['information'], 'string', 'max' => 2009],
             [['owner'], 'string', 'max' => 111],
             [['address'], 'string', 'max' => 125],
+            [['email'], 'email'],
+            [['phone_number'], 'string', 'max' => 21],
+            [['email'], 'string', 'max' => 72],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'user_id']],
         ];
     }
@@ -62,6 +65,8 @@ class Pet extends \yii\db\ActiveRecord
             'information' => 'Information',
             'owner' => 'Owner names',
             'address' => 'Address',
+            'email' => 'Email',
+            'phone_number' => 'Phone Number',
             'user_id' => 'Owner username',
         ];
     }
