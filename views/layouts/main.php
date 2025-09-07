@@ -39,12 +39,14 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
             !Yii::$app->user->isGuest ?
-            ['label' => 'My Pets', 'url' => ['/pet/index'], 'options' => ['data-cy' => 'navbar-pets-btn']]
+                ['label' => 'My Pets', 'url' => ['/pet/index'], 'options' => ['data-cy' => 'navbar-pets-btn']]
             : '',
             !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin() ?
-            ['label' => 'Users', 'url' => ['/user/index'], 'options' => ['data-cy' => 'navbar-users-btn']]
+                ['label' => 'Users', 'url' => ['/user/index'], 'options' => ['data-cy' => 'navbar-users-btn']]
+            : '',
+            !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin() ?
+                ['label' => 'Vaccines', 'url' => ['/vaccine/index'], 'options' => ['data-cy' => 'navbar-vaccines-btn']]
             : '',
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login'], 'options' => ['data-cy' => 'navbar-login-btn']]
