@@ -4,22 +4,25 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Vaccine;
+use app\models\PetVaccine;
 
 /**
- * VaccineSearch represents the model behind the search form of `app\models\Vaccine`.
+ * PetVaccineSearch represents the model behind the search form of `app\models\PetVaccine`.
  */
-class VaccineSearch extends Vaccine
+class PetVaccineSearch extends PetVaccine
 {
     /**
      * {@inheritdoc}
      */
+
+    public $pet_id;
+
     public function rules()
     {
         return [
-            [['vaccine_id'], 'integer'],
-            [['name', 'description'], 'safe'],
-            [['description'], 'string', 'max' => 2009],
+            [['pet_vaccine_id', 'pet_id', 'vaccine_id'], 'integer'],
+            [['date_given', 'notes'], 'safe'],
+            [['notes'], 'string', 'max' => 2009],
         ];
     }
 
@@ -41,7 +44,7 @@ class VaccineSearch extends Vaccine
      */
     public function search($params)
     {
-        $query = Vaccine::find();
+        $query = PetVaccine::find();
 
         // add conditions that should always apply here
 
@@ -58,12 +61,17 @@ class VaccineSearch extends Vaccine
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'vaccine_id' => $this->vaccine_id,
-        ]);
+        // $query->andFilterWhere([
+        //     'pet_vaccine_id' => $this->pet_vaccine_id,
+        //     'pet_id' => $this->pet_id,
+        //     'vaccine_id' => $this->vaccine_id,
+        //     'date_given' => $this->date_given,
+        // ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description]);
+        // $query->andFilterWhere(['like', 'notes', $this->notes]);
+        if ($this->pet_id) {
+            $query->andWhere(['pet_id' => $this->pet_id]);
+        }
 
         return $dataProvider;
     }

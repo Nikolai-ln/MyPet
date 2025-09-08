@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /** @var yii\web\View $this */
 /** @var app\models\Pet $model */
@@ -43,4 +44,23 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <h3> Vaccines of <?= Html::encode($this->title) ?> </h3>
+
+    <p>
+        <?= Html::a('Add Vaccine', ['pet-vaccine/create', 'pet_id' => $model->pet_id], ['class' => 'btn btn-success']) ?>
+    </p>
+
+    <?= GridView::widget([
+        'dataProvider' => new \yii\data\ActiveDataProvider([
+            'query' => $model->getPetVaccines(), // connection from Pet to PetVaccine
+        ]),
+        'columns' => [
+            'vaccine.name', // if we have a relation to Vaccine
+            'date_given',
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'controller' => 'pet-vaccine', // redirecting CRUD to PetVaccineController
+            ],
+        ],
+    ]); ?>
 </div>

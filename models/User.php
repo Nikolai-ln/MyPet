@@ -73,6 +73,11 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         return $this->role === 'admin';
     }
 
+    public function getPets()
+    {
+        return $this->hasMany(Pet::class, ['user_id' => 'user_id']);
+    }
+
     /**
      * {@inheritdoc}
      */
