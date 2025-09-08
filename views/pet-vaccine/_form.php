@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use app\models\Vaccine;
 
 /** @var yii\web\View $this */
 /** @var app\models\PetVaccine $model */
@@ -12,11 +14,22 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'pet_id')->textInput() ?>
+    <?= $form->field($model, 'pet_name')->textInput([
+            'value' => $model->pet ? $model->pet->name : '',
+            'readonly' => true,
+            'label' => 'Pet'
+        ])->label('Pet');
 
-    <?= $form->field($model, 'vaccine_id')->textInput() ?>
+        $form->field($model, 'pet_id')->hiddenInput([
+            'value' => $model->pet_id])->label(false);
+    ?>
 
-    <?= $form->field($model, 'date_given')->textInput() ?>
+    <?= $form->field($model, 'vaccine_id')->dropDownList(
+            ArrayHelper::map(Vaccine::find()->all(), 'vaccine_id', 'name'),
+            ['prompt' => 'Select Vaccine']
+    ) ?>
+
+    <?= $form->field($model, 'date_given')->input('date') ?>
 
     <?= $form->field($model, 'notes')->textInput(['maxlength' => true]) ?>
 

@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\PetVaccine $model */
 
-$this->title = $model->pet_vaccine_id;
+$this->title = $model->pet->name;
 $this->params['breadcrumbs'][] = ['label' => 'Pet Vaccines', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -29,9 +29,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'pet_vaccine_id',
-            'pet_id',
-            'vaccine_id',
+            // 'pet_vaccine_id',
+            'pet.name',
+            'vaccine.name',
             'date_given',
             'notes',
         ],

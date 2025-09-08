@@ -48,8 +48,8 @@ class PetVaccine extends \yii\db\ActiveRecord
     {
         return [
             'pet_vaccine_id' => 'Pet Vaccine ID',
-            'pet_id' => 'Pet ID',
-            'vaccine_id' => 'Vaccine ID',
+            'pet_id' => 'Pet',
+            'vaccine_id' => 'Vaccine',
             'date_given' => 'Date Given',
             'notes' => 'Notes',
         ];

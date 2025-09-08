@@ -20,7 +20,7 @@ use app\models\User;
 
     <?= $form->field($model, 'breed')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'date_of_birth')->textInput() ?>
+    <?= $form->field($model, 'date_of_birth')->input('date') ?>
 
     <?= $form->field($model, 'information')->textInput(['maxlength' => true]) ?>
 
