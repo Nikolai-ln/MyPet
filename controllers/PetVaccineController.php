@@ -81,12 +81,19 @@ class PetVaccineController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($pet_id = null)
     {
         $model = new PetVaccine();
 
-        if ($pet_id = Yii::$app->request->get('pet_id')) {
+        if ($pet_id !== null) {
             $model->pet_id = $pet_id;
+        }
+
+        if (!Yii::$app->user->identity->isAdmin() && $model->pet_id) {
+            $pet = $model->pet;
+        if (!$pet || $pet->user_id != Yii::$app->user->id) {
+                throw new \yii\web\ForbiddenHttpException('You are not allowed to add a vaccine to this pet.');
+            }
         }
 
         if ($this->request->isPost) {
