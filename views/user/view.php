@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var app\models\User $model */
@@ -42,6 +43,7 @@ $this->params['breadcrumbs'][] = $model->username;
     <?= GridView::widget([
         'dataProvider' => new \yii\data\ActiveDataProvider([
             'query' => $model->getPets(), // relation from User to Pet
+            'pagination' => ['pageSize' => 10],
         ]),
         'columns' => [
             'name',
@@ -50,7 +52,9 @@ $this->params['breadcrumbs'][] = $model->username;
             'date_of_birth',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'controller' => 'user', // redirecting to PetController for CRUD
+                'urlCreator' => function ($action, $model, $key, $index, $column) {
+                    return Url::toRoute(["/pet/$action", 'pet_id' => $model->pet_id]);
+                }
             ],
         ],
     ]); ?>

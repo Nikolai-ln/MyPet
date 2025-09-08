@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 /** @var app\models\Pet $model */
@@ -53,13 +54,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => new \yii\data\ActiveDataProvider([
             'query' => $model->getPetVaccines(), // connection from Pet to PetVaccine
+            'pagination' => ['pageSize' => 10],
         ]),
         'columns' => [
             'vaccine.name', // if we have a relation to Vaccine
             'date_given',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'controller' => 'pet-vaccine', // redirecting CRUD to PetVaccineController
+                'urlCreator' => function ($action, $petVaccineModel, $key, $index, $column) {
+                    return Url::toRoute(["/pet-vaccine/$action", 'pet_vaccine_id' => $petVaccineModel->pet_vaccine_id]);
+                }
             ],
         ],
     ]); ?>
