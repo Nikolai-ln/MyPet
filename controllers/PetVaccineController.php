@@ -7,6 +7,8 @@ use app\models\PetVaccineSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
 use Yii;
 
 /**
@@ -22,6 +24,19 @@ class PetVaccineController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['index', 'view', 'create', 'update', 'delete'],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function ($rule, $action) {
+                                return !Yii::$app->user->isGuest;
+                            }
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -96,6 +111,10 @@ class PetVaccineController extends Controller
     {
         $model = $this->findModel($pet_vaccine_id);
 
+        if (!Yii::$app->user->identity->isAdmin() && $model->pet->user_id != Yii::$app->user->id) {
+            throw new ForbiddenHttpException('You are not allowed to edit this vaccine.');
+        }
+
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'pet_vaccine_id' => $model->pet_vaccine_id]);
         }
@@ -114,7 +133,13 @@ class PetVaccineController extends Controller
      */
     public function actionDelete($pet_vaccine_id)
     {
-        $this->findModel($pet_vaccine_id)->delete();
+         $model = $this->findModel($pet_vaccine_id);
+
+         if (!Yii::$app->user->identity->isAdmin() && $model->pet->user_id != Yii::$app->user->id) {
+            throw new ForbiddenHttpException('You are not allowed to delete this vaccine.');
+        }
+
+        $model->delete();
 
         return $this->redirect(['index']);
     }

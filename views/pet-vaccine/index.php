@@ -30,8 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             // 'pet_vaccine_id',
-            'pet_id',
-            'vaccine_id',
+            [
+                'attribute' => 'pet.name',
+                'label' => 'Pet Name',
+            ],
+            [
+                'attribute' => 'vaccine.name',
+                'label' => 'Vaccine',
+            ],
             'date_given',
             'notes',
             [

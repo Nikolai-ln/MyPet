@@ -14,14 +14,16 @@ use app\models\Vaccine;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'pet_name')->textInput([
-            'value' => $model->pet ? $model->pet->name : '',
-            'readonly' => true,
-            'label' => 'Pet'
-        ])->label('Pet');
-
-        $form->field($model, 'pet_id')->hiddenInput([
-            'value' => $model->pet_id])->label(false);
+    <?php if ($model->pet_id) {
+            $form->field($model, 'pet_id')->hiddenInput([
+                'value' => $model->pet_id])->label(false);
+        }
+        elseif (!Yii::$app->user->isGuest && Yii::$app->user->identity->role === 'admin') {
+            $petsList = ArrayHelper::map(\app\models\Pet::find()->all(), 'pet_id', 'name');
+            echo $form->field($model, 'pet_id')->dropDownList($petsList, [
+                'prompt' => 'Select Pet'
+            ]);
+        }
     ?>
 
     <?= $form->field($model, 'vaccine_id')->dropDownList(
