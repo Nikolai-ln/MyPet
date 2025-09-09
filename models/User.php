@@ -34,6 +34,12 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             [['username'], 'required'],
+            [
+                ['username'],
+                'unique',
+                'targetClass' => self::class,
+                'message' => 'This username is already taken.',
+            ],
             [['password'], 'required', 'on' => 'create'],
             [['username'], 'string', 'max' => 55],
             [['password'], 'string', 'max' => 255],
