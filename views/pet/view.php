@@ -13,14 +13,15 @@ $this->params['breadcrumbs'][] = ['label' => 'Pets', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="pet-view">
+<div class="pet-view" data-cy="petView-div">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 data-cy="petView-title"><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'pet_id' => $model->pet_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Update', ['update', 'pet_id' => $model->pet_id], ['class' => 'btn btn-primary', 'data-cy' => 'petView-update-btn']) ?>
         <?= Html::a('Delete', ['delete', 'pet_id' => $model->pet_id], [
             'class' => 'btn btn-danger',
+            'data-cy' => 'petView-delete-btn',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
@@ -30,22 +31,53 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= DetailView::widget([
         'model' => $model,
+        'options' => [
+            'class' => 'table table-bordered detail-view',
+            'data-cy' => 'petView-detailView-table',
+        ],
         'attributes' => [
             // 'pet_id',
-            'name',
-            'type',
-            'breed',
-            'date_of_birth',
-            'information',
-            'owner',
-            'address',
-            'email',
-            'phone_number'
+            [
+                'attribute' => 'name',
+                'contentOptions' => ['data-cy' => 'petView-detailView-name'],
+            ],
+            [
+                'attribute' => 'type',
+                'contentOptions' => ['data-cy' => 'petView-detailView-type'],
+            ],
+            [
+                'attribute' => 'breed',
+                'contentOptions' => ['data-cy' => 'petView-detailView-breed'],
+            ],
+            [
+                'attribute' => 'date_of_birth',
+                'contentOptions' => ['data-cy' => 'petView-detailView-dateOfBirth'],
+            ],
+            [
+                'attribute' => 'information',
+                'contentOptions' => ['data-cy' => 'petView-detailView-information'],
+            ],
+            [
+                'attribute' => 'owner',
+                'contentOptions' => ['data-cy' => 'petView-detailView-owner'],
+            ],
+            [
+                'attribute' => 'address',
+                'contentOptions' => ['data-cy' => 'petView-detailView-address'],
+            ],
+            [
+                'attribute' => 'email',
+                'contentOptions' => ['data-cy' => 'petView-detailView-email'],
+            ],
+            [
+                'attribute' => 'phone_number',
+                'contentOptions' => ['data-cy' => 'petView-detailView-phoneNumber'],
+            ],
             // 'user_id',
         ],
     ]) ?>
 
-    <h3> Vaccines of <?= Html::encode($this->title) ?> </h3>
+    <h3 data-cy="petView-vaccines-title"> Vaccines of <?= Html::encode($this->title) ?> </h3>
 
     <p>
         <?= Html::a('Add Vaccine', ['pet-vaccine/create', 'pet_id' => $model->pet_id], ['class' => 'btn btn-success']) ?>

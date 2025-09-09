@@ -13,12 +13,12 @@ use yii\grid\GridView;
 $this->title = 'My Pets';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="pet-index">
+<div class="pet-index" data-cy="petIndex-div">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 data-cy="petIndex-title"><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Add Pet', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Add Pet', ['create'], ['class' => 'btn btn-success', 'data-cy' => 'petIndex-createPet-button']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
