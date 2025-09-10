@@ -17,6 +17,10 @@ class pet {
     return cy.get('[data-cy=petView-div');
   }
 
+  petUpdateDiv() {
+    return cy.get('[data-cy=petUpdate-div');
+  }
+
   petCreateTitle() {
     return cy.get('[data-cy=petCreate-title');
   }
@@ -27,6 +31,10 @@ class pet {
 
   petViewTitle() {
     return cy.get('[data-cy=petView-title]');
+  }
+
+  petUpdateTitle() {
+    return cy.get('[data-cy=petUpdate-title');
   }
 
   petForm() {

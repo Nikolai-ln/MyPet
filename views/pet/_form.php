@@ -33,7 +33,7 @@ use app\models\User;
     <?= $form->field($model, 'phone_number')->textInput(['maxlength' => true, 'data-cy' => 'petForm-inputPet-phoneNumber']) ?>
 
     <?php if (Yii::$app->user->identity->role === 'admin'): ?>
-        <?= $form->field($model, 'user_id', ['options' => ['data-cy' => 'petForm-inputPet-ownerLabel']])->dropDownList(
+        <?= $form->field($model, 'user_id', ['options' => ['class' => 'form-group', 'data-cy' => 'petForm-inputPet-ownerLabel']])->dropDownList(
             ArrayHelper::map(User::find()->all(), 'user_id', 'username'),
             ['prompt' => 'Select User', 'data-cy' => 'petForm-inputPet-selectUser']
         ) ?>

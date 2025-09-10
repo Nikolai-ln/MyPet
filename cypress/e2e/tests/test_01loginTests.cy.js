@@ -83,18 +83,18 @@ describe('Test 1 - Login tests', { defaultCommandTimeout: 5000 }, () => {
         pet.petSelectUserInput().should('be.visible').select('UserCypress');
 
         pet.petSaveButton().should('be.visible').click();
-
-        cy.url({ timeout: 10000 })
-        .should('include', '/pet/view?pet_id=');
       });
+
+      cy.url({ timeout: 10000 })
+        .should('include', '/pet/view?pet_id=');
     });
 
-    it('Check if the new pet is created and get the pet id', { retries: { runMode: 1, openMode: 1 } }, () => {
-      cy.url({ timeout: 10000 })
+    it('Check if the new pet is created and get the pet id', () => {
+      cy.url()
         .should('include', '/pet/view?pet_id=');
 
       cy.url().then((url) => {
-        const temp = url.split('pet_id=')[1]
+        const temp = url.split('pet_id=')[1] // take the ending part after that
         expect(temp).to.not.be.undefined;
 
         petId = temp;
@@ -120,7 +120,59 @@ describe('Test 1 - Login tests', { defaultCommandTimeout: 5000 }, () => {
       });
     });
 
-    it('Delete the new pet', { retries: { runMode: 1, openMode: 1 } }, () => {
+    it('Open the pet update form', () => {
+      pet.updatePetButton().should('be.visible').click();
+
+      cy.url({ timeout: 6000 })
+        .should('include', `/pet/update?pet_id=${petId}`);
+
+      pet.petUpdateTitle().should('be.visible');
+    });
+
+    it('Update some of the pet data', () => {
+      pet.petUpdateDiv().should('be.visible').within(() => {
+        pet.petUpdateTitle().should('be.visible');
+        pet.petNameInput().should('be.visible').should('have.value', petName)
+          .clear().type(`${petName}+edited`);
+        pet.petTypeInput().should('be.visible').should('have.value', "dog");
+        pet.petBreedInput().should('be.visible').should('have.value', "pincher");
+        pet.petDateOfBirthInput().should('be.visible').should('have.value', "2021-05-05");
+        pet.petInformationInput().should('be.visible').should('have.value', petInformation)
+          .clear().type(`Updated+${petInformation}`);
+        pet.petOwnerInput().should('be.visible').should('have.value', "Nikolai Nikolov");
+        pet.petAddressInput().should('be.visible').should('have.value', "Plovdiv");
+        pet.petEmailInput().should('be.visible').should('have.value', petUserEmail);
+        pet.petPhoneNumberInput().should('be.visible').should('have.value', "0888123456");
+        pet.petSelectUserInput().should('be.visible').should('contain', 'UserCypress');
+
+        pet.petSaveButton().click();
+      });
+
+      cy.url({ timeout: 6000 })
+        .should('include', `/pet/view?pet_id=${petId}`);
+
+      pet.petViewTitle().should('be.visible');
+    });
+
+    it('Check the edited pet data', () => {
+      pet.petViewTitle().should('be.visible');
+      pet.updatePetButton().should('be.visible');
+      pet.deletePetButton().should('be.visible');
+
+      pet.petViewTable().should('be.visible').within(() => {
+        pet.petViewName().should('be.visible').should('contain', `${petName}+edited`);
+        pet.petViewType().should('be.visible').should('contain', "dog");
+        pet.petViewBreed().should('be.visible').should('contain', "pincher");
+        pet.petViewDateOfBirth().should('be.visible').should('contain', "2021-05-05");
+        pet.petViewInformation().should('be.visible').should('contain', `Updated+${petInformation}`);
+        pet.petViewOwner().should('be.visible').should('contain', "Nikolai Nikolov");
+        pet.petViewAddress().should('be.visible').should('contain', "Plovdiv");
+        pet.petViewEmail().should('be.visible').should('contain', petUserEmail);
+        pet.petViewPhoneNumber().should('be.visible').should('contain', "0888123456");
+      });
+    });
+
+    it('Delete the new pet', () => {
       cy.url({ timeout: 10000 })
         .should('include', '/pet/view?pet_id=');
 
