@@ -14,6 +14,8 @@ use app\models\User;
 
     <?php $form = ActiveForm::begin(['options' => ['data-cy' => 'petForm-form']]); ?>
 
+    <?= $form->field($model, 'file')->fileInput() ?>
+
     <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'data-cy' => 'petForm-inputPet-name']) ?>
 
     <?= $form->field($model, 'type')->textInput(['maxlength' => true, 'data-cy' => 'petForm-inputPet-type']) ?>
@@ -44,5 +46,9 @@ use app\models\User;
     </div>
 
     <?php ActiveForm::end(); ?>
+
+    <?php if(isset($errorMessage)): ?>
+        <span style="color:red;"><?= $errorMessage ?></span>
+    <?php endif; ?>
 
 </div>

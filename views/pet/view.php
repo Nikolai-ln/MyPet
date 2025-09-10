@@ -38,6 +38,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             // 'pet_id',
             [
+                'label' => 'Photo',
+                'attribute' => 'photo',
+                'format' => 'html',
+                'value' => function($item) {
+                    if(!$item->photo){
+                        return NULL;
+                    }
+                    $path = Yii::getAlias('@web');
+                    $tag = '<img src="'. $path . '/' . $item->photo. '" style="max-width:75px; max-height:75px;" />';
+                    return $tag;
+                }
+            ],
+            [
                 'attribute' => 'name',
                 'contentOptions' => ['data-cy' => 'petView-detailView-name'],
             ],

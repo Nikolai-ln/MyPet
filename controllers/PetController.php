@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\UploadedFile;
 use Yii;
 
 /**
@@ -87,26 +88,53 @@ class PetController extends Controller
      */
     public function actionCreate()
     {
+        $request = Yii::$app->request;
         $model = new Pet();
+        $fileSuccess = NULL;
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post())) {
+        if ($request->isPost) {
+             $modelLoaded = $model->load($request->post());
 
-                // if the user is not an admin we would link the current user
-                if (Yii::$app->user->identity->role !== 'admin') {
-                    $model->user_id = Yii::$app->user->id;
-                }
+             if (!$modelLoaded) {
+                return $this->render('create', [
+                    'model' => $model,
+                    'errorMessage' => "Missing parameters!",
+                ]);
+            }
+            // get the instance of the uploaded file
+            $file = UploadedFile::getInstance($model, 'file');
 
-                if ($model->save()) {
-                    return $this->redirect(['view', 'pet_id' => $model->pet_id]);
-                }
+            if ($file) {
+                $photoPath = "uploads/".$model->name."-".$file->name;
+                $fileSuccess = $file->saveAs($photoPath);
+            }
+
+            if ($file && !$fileSuccess) {
+                return $this->render('create', [
+                    'model' => $model,
+                    'errorMessage' => "Cannot write file to disk!",
+                ]);
+            }
+
+            if ($file && $fileSuccess) {
+                // save the path in the db column
+                $model->setAttribute('photo', $photoPath);
+            }
+
+            // if the user is not an admin we would link the current user
+            if (Yii::$app->user->identity->role !== 'admin') {
+                $model->user_id = Yii::$app->user->id;
+            }
+
+            if ($model->validate() && $model->save()) {
+                return $this->redirect(['view', 'pet_id' => $model->pet_id]);
             }
         } else {
             $model->loadDefaultValues();
         }
-
         return $this->render('create', [
             'model' => $model,
+            'errorMessage' => NULL,
         ]);
     }
 
@@ -120,9 +148,40 @@ class PetController extends Controller
     public function actionUpdate($pet_id)
     {
         $model = $this->findModel($pet_id);
+        $request = Yii::$app->request;
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'pet_id' => $model->pet_id]);
+        if ($request->isPost) {
+
+            $modelLoaded = $model->load($request->post());
+
+            if (!$modelLoaded) {
+                return $this->render('update', [
+                    'model' => $model,
+                    'errorMessage' => "Missing parameters!",
+                ]);
+            }
+            // get the instance of the uploaded file
+            $photoPath = $model->photo;
+            $fileSuccess = true;
+            $file = UploadedFile::getInstance($model, 'file');
+
+            if($file){
+                $photoPath = "uploads/".$model->name."-".$file->name;
+                $fileSuccess = $file->saveAs($photoPath);
+            }
+
+            if (!$fileSuccess) {
+                return $this->render('update', [
+                    'model' => $model,
+                    'errorMessage' => "Cannot update file to disk!",
+                ]);
+            }
+            // save the path in the db column
+            $model->setAttribute('photo', $photoPath);
+
+            if ($fileSuccess && $model->validate() && $model->save()) {
+                return $this->redirect(['view', 'pet_id' => $model->pet_id]);
+            }
         }
 
         return $this->render('update', [

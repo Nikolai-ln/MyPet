@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "pet".
@@ -34,6 +35,8 @@ class Pet extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
+    public $file;
     public function rules()
     {
         return [
@@ -48,6 +51,8 @@ class Pet extends \yii\db\ActiveRecord
             [['phone_number'], 'string', 'max' => 21],
             [['email'], 'string', 'max' => 72],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'user_id']],
+            [['photo'], 'string', 'max' => 512],
+            [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
@@ -68,6 +73,7 @@ class Pet extends \yii\db\ActiveRecord
             'email' => 'Email',
             'phone_number' => 'Phone Number',
             'user_id' => 'Owner username',
+            'file' => 'Photo',
         ];
     }
 

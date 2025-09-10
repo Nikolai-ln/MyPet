@@ -45,3 +45,6 @@ tests/_support/_generated
 # Cypress video and screenshot
 cypress/videos/
 cypress/screenshots/
+
+#uploaded files
+/web/uploads/
