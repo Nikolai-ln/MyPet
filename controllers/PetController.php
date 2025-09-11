@@ -105,7 +105,7 @@ class PetController extends Controller
             $file = UploadedFile::getInstance($model, 'file');
 
             if ($file) {
-                $photoPath = "uploads/".$model->name."-".$file->name;
+                $photoPath = "uploads/".$model->name.'.' . $model->pet_id ."-".$file->name;
                 $fileSuccess = $file->saveAs($photoPath);
             }
 
@@ -150,36 +150,32 @@ class PetController extends Controller
         $model = $this->findModel($pet_id);
         $request = Yii::$app->request;
 
-        if ($request->isPost) {
+        if ($request->isPost && $model->load($request->post())) {
 
-            $modelLoaded = $model->load($request->post());
+            $oldPhoto = $model->photo;
 
-            if (!$modelLoaded) {
-                return $this->render('update', [
-                    'model' => $model,
-                    'errorMessage' => "Missing parameters!",
-                ]);
-            }
             // get the instance of the uploaded file
-            $photoPath = $model->photo;
-            $fileSuccess = true;
             $file = UploadedFile::getInstance($model, 'file');
 
-            if($file){
-                $photoPath = "uploads/".$model->name."-".$file->name;
-                $fileSuccess = $file->saveAs($photoPath);
+            if ($file) {
+                $photoPath = 'uploads/' . $model->name . '.' . $model->pet_id . '-' . $file->baseName . '.' . $file->extension;
+
+                if ($file->saveAs($photoPath)) {
+                    if ($oldPhoto && file_exists($oldPhoto)) {
+                        @unlink($oldPhoto);
+                    }
+                    $model->photo = $photoPath;
+                } else {
+                    return $this->render('update', [
+                        'model' => $model,
+                        'errorMessage' => "Cannot update file to disk!",
+                    ]);
+                }
+            } else {
+                $model->photo = $oldPhoto;
             }
 
-            if (!$fileSuccess) {
-                return $this->render('update', [
-                    'model' => $model,
-                    'errorMessage' => "Cannot update file to disk!",
-                ]);
-            }
-            // save the path in the db column
-            $model->setAttribute('photo', $photoPath);
-
-            if ($fileSuccess && $model->validate() && $model->save()) {
+            if ($model->save()) {
                 return $this->redirect(['view', 'pet_id' => $model->pet_id]);
             }
         }
@@ -198,7 +194,13 @@ class PetController extends Controller
      */
     public function actionDelete($pet_id)
     {
-        $this->findModel($pet_id)->delete();
+        $model = $this->findModel($pet_id);
+
+        if ($model->photo && file_exists(Yii::getAlias('@webroot') . '/' . $model->photo)) {
+            @unlink(Yii::getAlias('@webroot') . '/' . $model->photo);
+        }
+
+        $model->delete();
 
         return $this->redirect(['index']);
     }
