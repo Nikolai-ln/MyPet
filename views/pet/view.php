@@ -13,6 +13,17 @@ $this->params['breadcrumbs'][] = ['label' => 'Pets', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
+<style>
+    .pet-photo img {
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        transition: transform 0.2s;
+    }
+    .pet-photo img:hover {
+        transform: scale(1.05);
+        border-color: #007bff;
+    }
+</style>
 <div class="pet-view" data-cy="petView-div">
 
     <h1 data-cy="petView-title"><?= Html::encode($this->title) ?></h1>
@@ -29,6 +40,15 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
+    <?php if ($model->photo && file_exists(Yii::getAlias('@webroot') . '/' . $model->photo)): ?>
+        <div class="pet-photo mb-3">
+            <img src="<?= Yii::getAlias('@web') . '/' . $model->photo ?>" 
+                class="img-thumbnail" 
+                style="max-width:200px; max-height:200px;" 
+                alt="Pet photo">
+        </div>
+    <?php endif; ?>
+
     <?= DetailView::widget([
         'model' => $model,
         'options' => [
@@ -37,19 +57,19 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'attributes' => [
             // 'pet_id',
-            [
-                'label' => 'Photo',
-                'attribute' => 'photo',
-                'format' => 'html',
-                'value' => function($item) {
-                    if(!$item->photo){
-                        return NULL;
-                    }
-                    $path = Yii::getAlias('@web');
-                    $tag = '<img src="'. $path . '/' . $item->photo. '" style="max-width:75px; max-height:75px;" />';
-                    return $tag;
-                }
-            ],
+            // [
+            //     'label' => 'Photo',
+            //     'attribute' => 'photo',
+            //     'format' => 'html',
+            //     'value' => function($item) {
+            //         if(!$item->photo){
+            //             return NULL;
+            //         }
+            //         $path = Yii::getAlias('@web');
+            //         $tag = '<img src="'. $path . '/' . $item->photo. '" style="max-width:75px; max-height:75px;" />';
+            //         return $tag;
+            //     }
+            // ],
             [
                 'attribute' => 'name',
                 'contentOptions' => ['data-cy' => 'petView-detailView-name'],
