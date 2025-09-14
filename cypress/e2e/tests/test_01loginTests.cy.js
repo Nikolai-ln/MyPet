@@ -69,7 +69,7 @@ describe('Test 1 - Login tests', { defaultCommandTimeout: 5000 }, () => {
       pet.petCreateTitle().should('be.visible');
     });
 
-    it('Try to add a new pet without all mandatory fileds filled', () => {
+    it('Try to add a new pet without all mandatory fields filled', () => {
       pet.petCreateDiv().should('be.visible').within(() => {
         pet.petCreateTitle().should('be.visible');
         pet.petNameInput().should('be.visible').type(petName);
