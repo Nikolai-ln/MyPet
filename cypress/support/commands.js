@@ -26,9 +26,11 @@
 import Login from '../e2e/pageObjects/login';
 import Navbar from '../e2e/pageObjects/navbar';
 import Random from '../e2e/externalFunctions/random';
+import Pet from '../e2e/pageObjects/pet';
 
 const login = new Login();
 const navbar = new Navbar();
+const pet = new Pet();
 
 // store tokens
 let LOCAL_STORAGE_MEMORY = {};
@@ -144,6 +146,20 @@ Cypress.Commands.add('SignIn', (uUsername, uPass) => {
 
     login.signInButton().click();
   });
+});
+
+Cypress.Commands.add('UploadFile', (name, mType) => {
+  // const fileName = name;
+
+  cy.fixture(name, { encoding: null })
+    .then((contents) => {
+      pet.petFormPhoto().selectFile({
+        contents,
+        fileName: name,
+        // mimeType: mType,
+        encoding: 'utf-8',
+      }, {force: true});
+    });
 });
 
 Cypress.Commands.add('Logout', () => {

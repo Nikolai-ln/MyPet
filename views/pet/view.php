@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?php if ($model->photo && file_exists(Yii::getAlias('@webroot') . '/' . $model->photo)): ?>
-        <div class="pet-photo mb-3">
+        <div class="pet-photo mb-3" data-cy="petView-photo">
             <img src="<?= Yii::getAlias('@web') . '/' . $model->photo ?>" 
                 class="img-thumbnail" 
                 style="max-width:200px; max-height:200px;" 

@@ -11,6 +11,8 @@ const petInformation = `Information+${Random.text(5)}`;
 const petUserEmail = `user+${Random.text(5)}@abv.bg`;
 let petId = null;
 const userData = require('../../fixtures/wrongUserDetails.json');
+const files = ['Wolf.jfif', 'dog.jpeg'];
+const filePath = 'cypress/fixtures/';
 
 describe('Test 1 - Login tests', { defaultCommandTimeout: 5000 }, () => {
   before(() => {
@@ -67,10 +69,29 @@ describe('Test 1 - Login tests', { defaultCommandTimeout: 5000 }, () => {
       pet.petCreateTitle().should('be.visible');
     });
 
-    it('Add data to a new pet', () => {
+    it('Try to add a new pet without all mandatory fileds filled', () => {
       pet.petCreateDiv().should('be.visible').within(() => {
         pet.petCreateTitle().should('be.visible');
         pet.petNameInput().should('be.visible').type(petName);
+        pet.petTypeInput().should('be.visible');
+
+        pet.petSaveButton().should('be.visible').click();
+      });
+    });
+
+    it('Check for shown help messages', { retries: { runMode: 1, openMode: 1 } }, () => {
+      cy.contains('Type cannot be blank.').should('be.visible');
+
+      cy.url({ timeout: 5000 })
+        .should('not.include', 'pet/view?pet_id=')
+        .should('include', '/pet/create');
+    });
+
+    it('Add data to a new pet', () => {
+      pet.petCreateDiv().should('be.visible').within(() => {
+        pet.petCreateTitle().should('be.visible');
+        pet.petFormPhoto().should('be.visible');
+        pet.petNameInput().should('be.visible').clear().type(petName);
         pet.petTypeInput().should('be.visible').type("dog");
         pet.petBreedInput().should('be.visible').type("pincher");
         pet.petDateOfBirthInput().should('be.visible').type("2021-05-05");
@@ -108,6 +129,7 @@ describe('Test 1 - Login tests', { defaultCommandTimeout: 5000 }, () => {
       pet.deletePetButton().should('be.visible');
 
       pet.petViewTable().should('be.visible').within(() => {
+        pet.petViewPhoto().should('not.exist');
         pet.petViewName().should('be.visible').should('contain', petName);
         pet.petViewType().should('be.visible').should('contain', "dog");
         pet.petViewBreed().should('be.visible').should('contain', "pincher");
@@ -133,12 +155,12 @@ describe('Test 1 - Login tests', { defaultCommandTimeout: 5000 }, () => {
       pet.petUpdateDiv().should('be.visible').within(() => {
         pet.petUpdateTitle().should('be.visible');
         pet.petNameInput().should('be.visible').should('have.value', petName)
-          .clear().type(`${petName}+edited`);
+           .clear().type(`${petName}+edited`);
         pet.petTypeInput().should('be.visible').should('have.value', "dog");
         pet.petBreedInput().should('be.visible').should('have.value', "pincher");
         pet.petDateOfBirthInput().should('be.visible').should('have.value', "2021-05-05");
         pet.petInformationInput().should('be.visible').should('have.value', petInformation)
-          .clear().type(`Updated+${petInformation}`);
+           .clear().type(`Updated+${petInformation}`);
         pet.petOwnerInput().should('be.visible').should('have.value', "Nikolai Nikolov");
         pet.petAddressInput().should('be.visible').should('have.value', "Plovdiv");
         pet.petEmailInput().should('be.visible').should('have.value', petUserEmail);
@@ -159,6 +181,66 @@ describe('Test 1 - Login tests', { defaultCommandTimeout: 5000 }, () => {
       pet.updatePetButton().should('be.visible');
       pet.deletePetButton().should('be.visible');
 
+      pet.petViewTable().should('be.visible').within(() => {
+        pet.petViewName().should('be.visible').should('contain', `${petName}+edited`);
+        pet.petViewType().should('be.visible').should('contain', "dog");
+        pet.petViewBreed().should('be.visible').should('contain', "pincher");
+        pet.petViewDateOfBirth().should('be.visible').should('contain', "2021-05-05");
+        pet.petViewInformation().should('be.visible').should('contain', `Updated+${petInformation}`);
+        pet.petViewOwner().should('be.visible').should('contain', "Nikolai Nikolov");
+        pet.petViewAddress().should('be.visible').should('contain', "Plovdiv");
+        pet.petViewEmail().should('be.visible').should('contain', petUserEmail);
+        pet.petViewPhoneNumber().should('be.visible').should('contain', "0888123456");
+      });
+    });
+
+    it('Open the pet update form', () => {
+      pet.updatePetButton().should('be.visible').click();
+
+      cy.url({ timeout: 6000 })
+        .should('include', `/pet/update?pet_id=${petId}`);
+
+      pet.petUpdateTitle().should('be.visible');
+    });
+
+    it('Try to upload an image of not supported format', () => {
+      pet.petUpdateDiv().should('be.visible').within(() => {
+        pet.petUpdateTitle().should('be.visible');
+        pet.petFormPhoto().should('be.visible').selectFile(filePath+files[0]);
+        pet.petNameInput().should('be.visible').should('have.value', `${petName}+edited`);
+
+        pet.petSaveButton().should('be.visible').click();
+      });
+    });
+
+    it('Check for shown help messages', { retries: { runMode: 1, openMode: 1 } }, () => {
+      cy.contains('Only files with these extensions are allowed: png, jpg, jpeg.').should('be.visible');
+
+      cy.url()
+        .should('include', `/pet/update?pet_id=${petId}`);
+    });
+
+    it('Upload an image', () => {
+      pet.petUpdateDiv().should('be.visible').within(() => {
+        pet.petUpdateTitle().should('be.visible');
+        pet.petFormPhoto().should('be.visible').selectFile(filePath+files[1]);
+        pet.petNameInput().should('be.visible').should('have.value', `${petName}+edited`);
+
+        pet.petSaveButton().should('be.visible').click();
+      });
+
+      cy.url({ timeout: 6000 })
+        .should('include', `/pet/view?pet_id=${petId}`);
+
+      pet.petViewTitle().should('be.visible');
+    });
+
+    it('Check for the uploaded photo and the same entered data', () => {
+      pet.petViewTitle().should('be.visible');
+      pet.updatePetButton().should('be.visible');
+      pet.deletePetButton().should('be.visible');
+
+      pet.petViewPhoto().should('be.visible');
       pet.petViewTable().should('be.visible').within(() => {
         pet.petViewName().should('be.visible').should('contain', `${petName}+edited`);
         pet.petViewType().should('be.visible').should('contain', "dog");

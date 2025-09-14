@@ -41,6 +41,10 @@ class pet {
     return cy.get('[data-cy=petForm-form');
   }
 
+  petFormPhoto() {
+    return cy.get('[data-cy=petForm-inputPet-photo]');
+  }
+
   petNameInput() {
     return cy.get('[data-cy=petForm-inputPet-name]');
   }
@@ -95,6 +99,10 @@ class pet {
 
   deletePetButton() {
     return cy.get('[data-cy=petView-delete-btn]').contains('Delete').should('be.visible');
+  }
+
+  petViewPhoto() {
+    return cy.get('[data-cy=petView-photo]');
   }
 
   petViewTable() {
