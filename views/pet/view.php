@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('Gallery', ['photo/photos', 'pet_id' => $model->pet_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Gallery', ['photo/photos', 'pet_id' => $model->pet_id], ['class' => 'btn btn-info']) ?>
     </p>
 
     <?php if ($model->photo && file_exists(Yii::getAlias('@webroot') . '/' . $model->photo)): ?>
