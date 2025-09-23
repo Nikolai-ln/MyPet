@@ -4,7 +4,6 @@ namespace app\models;
 
 use Yii;
 use yii\web\UploadedFile;
-
 /**
  * This is the model class for table "pet".
  *
@@ -27,6 +26,7 @@ class Pet extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $file;
     public static function tableName()
     {
         return 'pet';
@@ -35,8 +35,6 @@ class Pet extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-
-    public $file;
     public function rules()
     {
         return [

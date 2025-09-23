@@ -13,14 +13,22 @@ let petId = null;
 const userData = require('../../fixtures/wrongUserDetails.json');
 const files = ['Wolf.jfif', 'dog.jpeg'];
 const filePath = 'cypress/fixtures/';
+let startTime;
 
 describe('Test 1 - Login tests', { defaultCommandTimeout: 5000 }, () => {
   before(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
+    startTime = Date.now();
   });
 
   beforeEach(() => {
+    const elapsedTime = (Date.now() - startTime) / 1000 / 60;
+
+    if (elapsedTime > 20) {
+      throw new Error("Timeout reached, stopping tests in this describe block.");
+    }
+
     cy.restoreLocalStorage();
   });
 
