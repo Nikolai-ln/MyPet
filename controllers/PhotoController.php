@@ -98,6 +98,13 @@ class PhotoController extends Controller
     public function actionCreate($pet_id)
     {
         $request = Yii::$app->request;
+
+        $pet = \app\models\Pet::findOne($pet_id);
+
+        if (!$pet || (Yii::$app->user->identity->role === 'user' && $pet->user_id != Yii::$app->user->id)) {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
+
         $model = new Photo();
         $model->scenario = 'create';
         $fileSuccess = NULL;
