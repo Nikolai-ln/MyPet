@@ -6,9 +6,9 @@ use yii\helpers\Html;
 /** @var app\models\PetVaccine $model */
 
 if ($model->pet_id)
-    $this->title = 'Create Pet Vaccine for ' . $model->pet->name;
+    $this->title = 'Add a Pet Vaccine for ' . $model->pet->name;
 else
-    $this->title = 'Create Pet Vaccine';
+    $this->title = 'Add a Pet Vaccine';
 $this->params['breadcrumbs'][] = ['label' => 'Pet Vaccines', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

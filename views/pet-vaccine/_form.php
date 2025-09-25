@@ -28,12 +28,40 @@ use app\models\Vaccine;
 
     <?= $form->field($model, 'vaccine_id')->dropDownList(
             ArrayHelper::map(Vaccine::find()->all(), 'vaccine_id', 'name'),
-            ['prompt' => 'Select Vaccine']
+            ['prompt' => 'Select Vaccine', 'id' => 'vaccine-id']
     ) ?>
+
+    <?= $form->field($model, 'description')->textarea([
+        'rows' => 3,
+        'id' => 'vaccine-description',
+        'value' => $model->vaccine ? $model->vaccine->description : '',
+        'readonly' => true
+    ]) ?>
+
+    <?php
+        $vaccines = Vaccine::find()->all();
+        $descriptions = [];
+        foreach ($vaccines as $vaccine) {
+            $descriptions[$vaccine->vaccine_id] = $vaccine->description;
+        }
+
+        $this->registerJs("
+            var vaccineDescriptions = " . json_encode($descriptions) . ";
+
+            $('#vaccine-id').on('change', function() {
+                var id = $(this).val();
+                if (id && vaccineDescriptions[id]) {
+                    $('#vaccine-description').val(vaccineDescriptions[id]);
+                } else {
+                    $('#vaccine-description').val('');
+                }
+            });
+        ");
+    ?>
 
     <?= $form->field($model, 'date_given')->input('date') ?>
 
-    <?= $form->field($model, 'notes')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'notes')->textarea(['rows' => 3, 'maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

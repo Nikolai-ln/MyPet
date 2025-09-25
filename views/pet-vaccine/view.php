@@ -30,8 +30,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             // 'pet_vaccine_id',
-            'pet.name',
-            'vaccine.name',
+            // [
+            //     'attribute' => 'pet.name',
+            //     'label' => 'Pet name',
+            // ],
+            [
+                'attribute' => 'vaccine.name',
+                'label' => 'Vaccine name',
+            ],
+            [
+                'attribute' => 'vaccine.description',
+                'label' => 'Vaccine description',
+            ],
             'date_given',
             'notes',
         ],
