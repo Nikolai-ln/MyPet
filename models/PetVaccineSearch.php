@@ -17,12 +17,14 @@ class PetVaccineSearch extends PetVaccine
      */
 
     public $pet_id;
+    public $petName;
+    public $vaccineName;
 
     public function rules()
     {
         return [
             [['pet_vaccine_id', 'pet_id', 'vaccine_id'], 'integer'],
-            [['date_given', 'notes'], 'safe'],
+            [['date_given', 'notes', 'petName', 'vaccineName'], 'safe'],
             [['notes'], 'string', 'max' => 2009],
         ];
     }
@@ -45,7 +47,7 @@ class PetVaccineSearch extends PetVaccine
      */
     public function search($params)
     {
-        $query = PetVaccine::find()->joinWith('pet');
+        $query = PetVaccine::find()->joinWith('pet')->joinWith('vaccine');
 
         // add conditions that should always apply here
 
@@ -55,6 +57,7 @@ class PetVaccineSearch extends PetVaccine
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => ['pageSize' => 20],
         ]);
 
         $this->load($params);
@@ -66,14 +69,16 @@ class PetVaccineSearch extends PetVaccine
         }
 
         // grid filtering conditions
-        // $query->andFilterWhere([
-        //     'pet_vaccine_id' => $this->pet_vaccine_id,
-        //     'pet_id' => $this->pet_id,
-        //     'vaccine_id' => $this->vaccine_id,
-        //     'date_given' => $this->date_given,
-        // ]);
+        $query->andFilterWhere(['like', 'pet.name', $this->petName])
+            ->andFilterWhere([
+                'pet_vaccine_id' => $this->pet_vaccine_id,
+                'pet_id' => $this->pet_id,
+                'vaccine_id' => $this->vaccine_id,
+                'date_given' => $this->date_given,
+            ]);
 
-        // $query->andFilterWhere(['like', 'notes', $this->notes]);
+        $query->andFilterWhere(['like', 'notes', $this->notes]);
+        $query->andFilterWhere(['like', 'vaccine.name', $this->vaccineName]);
         if ($this->pet_id) {
             $query->andWhere(['pet_id' => $this->pet_id]);
         }

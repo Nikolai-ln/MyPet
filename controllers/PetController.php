@@ -51,16 +51,15 @@ class PetController extends Controller
      */
     public function actionIndex()
     {
+        $searchModel = new PetSearch();
+
         if (Yii::$app->user->identity->role === 'admin') {
             $query = Pet::find();
         } else {
             $query = Pet::find()->where(['user_id' => Yii::$app->user->id]);
         }
 
-        $searchModel = new PetSearch();
-        $dataProvider = new \yii\data\ActiveDataProvider([
-            'query' => $query,
-        ]);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $query);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

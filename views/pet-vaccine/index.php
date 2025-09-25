@@ -30,15 +30,29 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             // 'pet_vaccine_id',
+            // [
+            //     'attribute' => 'pet.name',
+            //     'label' => 'Pet Name',
+            // ],
             [
-                'attribute' => 'pet.name',
+                'attribute' => 'petName',
                 'label' => 'Pet Name',
+                'value' => function($model) {
+                    return $model->pet ? $model->pet->name : null;
+                },
             ],
             [
-                'attribute' => 'vaccine.name',
+                // 'attribute' => 'vaccine.name',
+                'attribute' => 'vaccineName',
                 'label' => 'Vaccine',
+                'value' => function($model) {
+                    return $model->vaccine ? $model->vaccine->name : null;
+                },
             ],
-            'date_given',
+            [
+                'attribute' => 'date_given',
+                'filter' => false,
+            ],
             'notes',
             [
                 'class' => ActionColumn::className(),

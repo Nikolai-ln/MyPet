@@ -39,9 +39,11 @@ class PetSearch extends Pet
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $query = null)
     {
-        $query = Pet::find();
+        if ($query === null) {
+            $query = Pet::find();
+        }
 
         // add conditions that should always apply here
 
