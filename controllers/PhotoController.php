@@ -63,6 +63,12 @@ class PhotoController extends Controller
             $pet = null;
         }
 
+        $pet = \app\models\Pet::findOne($pet_id);
+
+        if (!$pet || (Yii::$app->user->identity->role === 'user' && $pet->user_id != Yii::$app->user->id)) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
         $dataProvider = $searchModel->search($params);
 
         return $this->render('index', [
@@ -117,7 +123,8 @@ class PhotoController extends Controller
                         ]);
                     }
                     
-                    $photoPath = "uploads/".$model->pet->name.'.' . $model->pet->pet_id ."-".$file->name; // Yii::$app->security->generateRandomString();
+                    $extension = pathinfo($file->name, PATHINFO_EXTENSION);
+                    $photoPath = "uploads/".$model->pet->name . "." . Yii::$app->security->generateRandomString() . "." . $extension;
                     $fileSuccess = $file->saveAs($photoPath);
                     if ($file && !$fileSuccess) {
                         return $this->render('create', [
@@ -133,7 +140,7 @@ class PhotoController extends Controller
             }
 
             if ($model->validate()) {
-                return $this->redirect(['photo/gallery', 'pet_id' => $pet_id]);
+                return $this->redirect(['photo/index', 'pet_id' => $pet_id]);
             }
         }
 
@@ -178,7 +185,8 @@ class PhotoController extends Controller
 
             if($files){
                 foreach ($files as $file) {
-                    $photoPath = "uploads/".$model->pet->name.'.' . $model->pet->pet_id ."-".$file->name;
+                    $extension = pathinfo($file->name, PATHINFO_EXTENSION);
+                    $photoPath = "uploads/".$model->pet->name . "." . Yii::$app->security->generateRandomString() . "." . $extension;
                     if(file_exists($photoPathOld)){
                         if(strcmp($photoPath, $photoPathOld) !== 0){
                             @unlink($photoPathOld);
@@ -201,7 +209,7 @@ class PhotoController extends Controller
             }
 
             if ($model->validate() && $model->save()) {
-                return $this->redirect(['photo/gallery', 'pet_id' => $pet_id]);
+                return $this->redirect(['photo/index', 'pet_id' => $model->pet->pet_id]);
             }
         }
 
@@ -220,9 +228,11 @@ class PhotoController extends Controller
      */
     public function actionDelete($photo_id)
     {
-        $this->findModel($photo_id)->delete();
+        $model = $this->findModel($photo_id);
+        $pet_id = $model->pet_id;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['photo/index', 'pet_id' => $pet_id]);
     }
 
     /**
@@ -234,15 +244,34 @@ class PhotoController extends Controller
      */
     protected function findModel($photo_id)
     {
-        if (($model = Photo::findOne(['photo_id' => $photo_id])) !== null) {
-            return $model;
+        $model = Photo::findOne(['photo_id' => $photo_id]);
+
+        if ($model === null) {
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        if (Yii::$app->user->identity->role === 'user') {
+
+            if (!$model->pet || $model->pet->user_id != Yii::$app->user->id) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+        return $model;
     }
 
     public function actionPhotos($pet_id = null)
     {
+        $pet = $pet_id ? \app\models\Pet::findOne($pet_id) : null;
+
+        if (!$pet) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        if (Yii::$app->user->identity->role === 'user' && $pet->user_id != Yii::$app->user->id) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
         $query = \app\models\Photo::find();
 
         if ($pet_id !== null) {
@@ -264,11 +293,29 @@ class PhotoController extends Controller
         ]);
     }
 
-    public function actionGallery($pet_id)
+    public function actionGallery($pet_id = null)
     {
-        $pet = Pet::findOne($pet_id);
+        $pet = $pet_id ? \app\models\Pet::findOne($pet_id) : null;
+
+        if (!$pet) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        if (Yii::$app->user->identity->role === 'user' && $pet->user_id != Yii::$app->user->id) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        $query = \app\models\Photo::find();
+
+        if ($pet_id !== null) {
+            $query->andWhere(['pet_id' => $pet_id]);
+        }
+
         $dataProvider = new ActiveDataProvider([
-            'query' => Photo::find()->where(['pet_id' => $pet_id]),
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
         ]);
 
         return $this->render('gallery', [

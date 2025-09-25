@@ -12,6 +12,8 @@ use yii\grid\GridView;
 /** @var app\models\Pet $pet */
 
 $this->title = 'Photos of ' . $pet->name;
+$this->params['breadcrumbs'][] = ['label' => 'Pets', 'url' => ['pet/index']];
+$this->params['breadcrumbs'][] = ['label' => $pet->name, 'url' => ['pet/view', 'pet_id' => $pet->pet_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>
@@ -31,7 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <!-- <?= Html::a('Create Photo', ['create'], ['class' => 'btn btn-success']) ?> -->
+        <?= Html::a('Upload Photo', ['photo/create', 'pet_id' => $pet->pet_id], ['class' => 'btn btn-success me-2']) ?>
+        <?= Html::a('Gallery', ['photo/photos', 'pet_id' => $pet->pet_id], ['class' => 'btn btn-info']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

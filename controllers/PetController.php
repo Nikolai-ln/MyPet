@@ -105,7 +105,8 @@ class PetController extends Controller
             $file = UploadedFile::getInstance($model, 'file');
 
             if ($file) {
-                $photoPath = "uploads/".$model->name.'.' . $model->pet_id ."-".$file->name;
+                $extension = pathinfo($file->name, PATHINFO_EXTENSION);
+                $photoPath = "uploads/".$model->name . "." . Yii::$app->security->generateRandomString() . "." . $extension;
                 $fileSuccess = $file->saveAs($photoPath);
             }
 
@@ -158,7 +159,8 @@ class PetController extends Controller
             $file = UploadedFile::getInstance($model, 'file');
 
             if ($file) {
-                $photoPath = 'uploads/' . $model->name . '.' . $model->pet_id . '-' . $file->baseName . '.' . $file->extension;
+                $extension = pathinfo($file->name, PATHINFO_EXTENSION);
+                $photoPath = "uploads/".$model->name . "." . Yii::$app->security->generateRandomString() . "." . $extension;
 
                 if ($file->saveAs($photoPath)) {
                     if ($oldPhoto && file_exists($oldPhoto)) {
@@ -214,10 +216,16 @@ class PetController extends Controller
      */
     protected function findModel($pet_id)
     {
-        if (($model = Pet::findOne(['pet_id' => $pet_id])) !== null) {
-            return $model;
+        $model = Pet::findOne(['pet_id' => $pet_id]);
+
+        if ($model === null) {
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        if (Yii::$app->user->identity->role === 'user' && $model->user_id != Yii::$app->user->id) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        return $model;
     }
 }

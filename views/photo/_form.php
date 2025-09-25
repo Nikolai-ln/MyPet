@@ -16,12 +16,14 @@ use app\models\Pet;
 
     <?= $form->field($model, 'files[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
 
-    <!-- <?= Html::activeHiddenInput($model, 'pet_id') ?> -->
+    <?= Html::activeHiddenInput($model, 'pet_id') ?>
 
-    <?= $form->field($model, 'pet_id', ['options' => ['class' => 'form-group']])->dropDownList(
-        ArrayHelper::map(Pet::find()->all(), 'pet_id', 'name'),
-        ['prompt' => 'Select Pet']
-    ) ?>
+    <!-- <?php if (Yii::$app->user->identity->role === 'admin'): ?>
+        <?= $form->field($model, 'pet_id', ['options' => ['class' => 'form-group']])->dropDownList(
+            ArrayHelper::map(Pet::find()->all(), 'pet_id', 'name'),
+            ['prompt' => 'Select Pet']
+        ) ?>
+    <?php endif; ?> -->
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
