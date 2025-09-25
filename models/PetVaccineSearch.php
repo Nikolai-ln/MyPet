@@ -4,6 +4,7 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use Yii;
 use app\models\PetVaccine;
 
 /**
@@ -44,9 +45,13 @@ class PetVaccineSearch extends PetVaccine
      */
     public function search($params)
     {
-        $query = PetVaccine::find();
+        $query = PetVaccine::find()->joinWith('pet');
 
         // add conditions that should always apply here
+
+        if (Yii::$app->user->identity->role === 'user') {
+            $query->andWhere(['pet.user_id' => Yii::$app->user->id]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

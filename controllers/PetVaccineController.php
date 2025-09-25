@@ -160,10 +160,19 @@ class PetVaccineController extends Controller
      */
     protected function findModel($pet_vaccine_id)
     {
-        if (($model = PetVaccine::findOne(['pet_vaccine_id' => $pet_vaccine_id])) !== null) {
-            return $model;
+        $model = PetVaccine::findOne(['pet_vaccine_id' => $pet_vaccine_id]);
+
+        if ($model === null) {
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        if (Yii::$app->user->identity->role === 'user') {
+
+            if (!$model->pet || $model->pet->user_id != Yii::$app->user->id) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+            }
+        }
+
+        return $model;
     }
 }

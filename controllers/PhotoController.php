@@ -63,8 +63,6 @@ class PhotoController extends Controller
             $pet = null;
         }
 
-        $pet = \app\models\Pet::findOne($pet_id);
-
         if (!$pet || (Yii::$app->user->identity->role === 'user' && $pet->user_id != Yii::$app->user->id)) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
