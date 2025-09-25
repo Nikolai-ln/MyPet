@@ -60,6 +60,16 @@ class PetVaccineSearch extends PetVaccine
             'pagination' => ['pageSize' => 20],
         ]);
 
+        $dataProvider->sort->attributes['petName'] = [
+            'asc' => ['pet.name' => SORT_ASC],
+            'desc' => ['pet.name' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['vaccineName'] = [
+            'asc' => ['vaccine.name' => SORT_ASC],
+            'desc' => ['vaccine.name' => SORT_DESC],
+        ];
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -69,16 +79,20 @@ class PetVaccineSearch extends PetVaccine
         }
 
         // grid filtering conditions
+        if (!empty($this->date_given)) {
+            $query->andWhere(['like', 'date_given', $this->date_given]);
+        }
         $query->andFilterWhere(['like', 'pet.name', $this->petName])
             ->andFilterWhere([
                 'pet_vaccine_id' => $this->pet_vaccine_id,
                 'pet_id' => $this->pet_id,
                 'vaccine_id' => $this->vaccine_id,
-                'date_given' => $this->date_given,
+                // 'date_given' => $this->date_given,
             ]);
 
         $query->andFilterWhere(['like', 'notes', $this->notes]);
         $query->andFilterWhere(['like', 'vaccine.name', $this->vaccineName]);
+
         if ($this->pet_id) {
             $query->andWhere(['pet_id' => $this->pet_id]);
         }

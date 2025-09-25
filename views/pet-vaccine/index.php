@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'date_given',
-                'filter' => false,
+                // 'filter' => false,
             ],
             'notes',
             [
