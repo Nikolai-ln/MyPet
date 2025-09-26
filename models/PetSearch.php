@@ -66,7 +66,7 @@ class PetSearch extends Pet
         // grid filtering conditions
         $query->andFilterWhere([
             'pet_id' => $this->pet_id,
-            'date_of_birth' => $this->date_of_birth,
+            // 'date_of_birth' => $this->date_of_birth,
             'user_id' => $this->user_id,
         ]);
 
@@ -75,7 +75,8 @@ class PetSearch extends Pet
             ->andFilterWhere(['like', 'breed', $this->breed])
             ->andFilterWhere(['like', 'information', $this->information])
             ->andFilterWhere(['like', 'owner', $this->owner])
-            ->andFilterWhere(['like', 'address', $this->address]);
+            ->andFilterWhere(['like', 'address', $this->address])
+            ->andFilterWhere(['like', 'date_of_birth', $this->date_of_birth]);
 
         return $dataProvider;
     }
