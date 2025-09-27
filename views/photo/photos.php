@@ -60,7 +60,7 @@ $photos = $dataProvider->getModels();
         </button>
       </div>
       <div class="modal-body p-0">
-        <div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="false">
+        <div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="5000">
 
           <!-- Indicators -->
           <ol class="carousel-indicators">
