@@ -30,12 +30,6 @@ class SignupForm extends Model
             return null;
         }
 
-        $user = new User();
-        $user->username = $this->username;
-        $user->password = $this->password;
-        $user->role = 'user';
-        //$user->access_token = \Yii::$app->security->generateRandomString();
-
         if (User::find()->where(['username' => $user->username])->one() == true)
         {
             // \Yii::error(message, "User was not saved!1 ". VarDumper::dumpAsString($user->errors));
@@ -47,6 +41,7 @@ class SignupForm extends Model
         $user->username = $this->username;
         $user->password = $this->password;
         $user->role = 'user';
+        //$user->access_token = \Yii::$app->security->generateRandomString();
 
         if($user->save())
         {
