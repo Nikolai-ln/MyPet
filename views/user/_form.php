@@ -16,10 +16,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'value' => '']) ?>
 
-    <?= $form->field($model, 'role')->dropDownList([
-        'user' => 'User',
-        'admin' => 'Admin',
-    ]) ?>
+    <?php if (!Yii::$app->user->isGuest && Yii::$app->user->identity->role === 'admin'): ?>
+        <?= $form->field($model, 'role')->dropDownList([
+            'user' => 'User',
+            'admin' => 'Admin',
+        ]) ?>
+    <?php endif; ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

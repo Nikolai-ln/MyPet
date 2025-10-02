@@ -49,6 +49,9 @@ AppAsset::register($this);
             !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin() ?
                 ['label' => 'Vaccines', 'url' => ['/vaccine/index'], 'options' => ['data-cy' => 'navbar-vaccines-btn']]
             : '',
+            !Yii::$app->user->isGuest && !Yii::$app->user->identity->isAdmin() ?
+                ['label' => 'My Profile', 'url' => ['/user/view', 'user_id' => Yii::$app->user->id]]
+            : '',
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login'], 'options' => ['data-cy' => 'navbar-login-btn']]
             ) : (

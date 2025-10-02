@@ -29,9 +29,18 @@ class UserController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
+                            'actions' => ['view', 'update'],
                             'roles' => ['@'],
                             'matchCallback' => function ($rule, $action) {
-                                return !Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin();
+                                $user_id = Yii::$app->request->get('user_id');
+                                return Yii::$app->user->id == $user_id;
+                            }
+                        ],
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function ($rule, $action) {
+                                return Yii::$app->user->identity->isAdmin();
                             }
                         ],
                     ],

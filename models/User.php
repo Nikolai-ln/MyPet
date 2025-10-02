@@ -68,6 +68,19 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         return 'user';
     }
 
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+
+        if (Yii::$app->user->identity->role === 'admin') {
+            $scenarios['default'] = ['username', 'password', 'role'];
+        } else {
+            $scenarios['default'] = ['username', 'password'];
+        }
+
+        return $scenarios;
+    }
+
     public static function findIdentity($id)
     {
         return self::find()->where(['user_id' => $id])->one();
