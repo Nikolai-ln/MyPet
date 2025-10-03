@@ -135,6 +135,17 @@ Cypress.Commands.add('SignInWithDelay', (uEmail, uPass) => {
 
 Cypress.Commands.add('SignIn', (uUsername, uPass) => {
   login.form().within(($form) => {
+    if (uUsername)
+      login.username().type(uUsername);
+    if (uPass)
+      login.password().type(uPass);
+
+    login.signInButton().click();
+  });
+});
+
+Cypress.Commands.add('SignIn1', (uUsername, uPass) => {
+  login.form().within(($form) => {
     login.username().then(e => {
       if (uUsername)
         cy.wrap(e).type(uUsername);
