@@ -120,8 +120,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => new \yii\data\ActiveDataProvider([
-            'query' => $model->getPetVaccines(), // connection from Pet to PetVaccine
+            'query' => $model->getPetVaccines()->joinWith('vaccine'), // connection from Pet to PetVaccine
             'pagination' => ['pageSize' => 10],
+            'sort' => [
+                'attributes' => [
+                    'date_given',
+                    'vaccine.name' => [
+                        'asc' => ['vaccine.name' => SORT_ASC],
+                        'desc' => ['vaccine.name' => SORT_DESC],
+                    ],
+                ],
+                'defaultOrder' => ['date_given' => SORT_DESC],
+            ],
         ]),
         'columns' => [
             'vaccine.name', // if we have a relation to Vaccine
