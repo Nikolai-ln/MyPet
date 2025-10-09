@@ -2,23 +2,23 @@
 
 class navbar {
   login() {
-    return cy.get('[data-cy=navbar-login-btn]').should('be.visible');
+    return cy.get('[data-cy=navbar-login-btn]');
   }
 
   users() {
-    return cy.get('[data-cy=navbar-users-btn]').should('be.visible');
+    return cy.get('[data-cy=navbar-users-btn]');
   }
 
   pets() {
-    return cy.get('[data-cy=navbar-pets-btn]').should('be.visible');
+    return cy.get('[data-cy=navbar-pets-btn]');
   }
 
   vaccines() {
-    return cy.get('[data-cy=navbar-vaccines-btn]').should('be.visible');
+    return cy.get('[data-cy=navbar-vaccines-btn]');
   }
 
   logout() {
-    return cy.get('[data-cy=navbar-logout-btn]').should('be.visible');
+    return cy.get('[data-cy=navbar-logout-btn]');
   }
 }
 export default navbar;

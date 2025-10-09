@@ -36,27 +36,19 @@ describe('Test 1 - Login and basic tests', { defaultCommandTimeout: 5000 }, () =
     cy.saveLocalStorage();
   });
 
-  userData.forEach((user) => {
-    it(user.testName, () => { // 'Try to sign in with wrong or missing credentials'
-      cy.visit('/site/login');
-      cy.SignIn(user.username, user.password);
-      cy.contains(user.message).should('be.visible');
-      if (user.secondMessage)
-        cy.contains(user.secondMessage).should('be.visible');
-    });
-  });
-
   it('Sign in', { retries: { runMode: 1, openMode: 1 } }, () => {
     cy.visit('/site/login');
 
     cy.fixture('userDetails').then((user) => {
-      cy.SignIn(user.username, user.password);
+      cy.SignIn(user.usernameUser, user.passwordUser);
     });
 
     cy.url({ timeout: 10000 })
       .should('not.include', '/site/login');
 
     navbar.logout().should('be.visible');
+    navbar.users().should('not.exist');
+    navbar.vaccines().should('not.exist');
   });
 
   it('Open My Pets menu', () => {
@@ -108,8 +100,8 @@ describe('Test 1 - Login and basic tests', { defaultCommandTimeout: 5000 }, () =
       pet.petAddressInput().should('be.visible').type("Plovdiv");
       pet.petEmailInput().should('be.visible').type(petUserEmail);
       pet.petPhoneNumberInput().should('be.visible').type("0888123456");
-      pet.petOwnerLabelInput().should('be.visible');
-      pet.petSelectUserInput().should('be.visible').select('UserCypress');
+      pet.petOwnerLabelInput().should('not.exist');
+      pet.petSelectUserInput().should('not.exist');
 
       pet.petSaveButton().should('be.visible').click();
     });
@@ -173,7 +165,7 @@ describe('Test 1 - Login and basic tests', { defaultCommandTimeout: 5000 }, () =
       pet.petAddressInput().should('be.visible').should('have.value', "Plovdiv");
       pet.petEmailInput().should('be.visible').should('have.value', petUserEmail);
       pet.petPhoneNumberInput().should('be.visible').should('have.value', "0888123456");
-      pet.petSelectUserInput().should('be.visible').should('contain', 'UserCypress');
+      pet.petSelectUserInput().should('not.exist');
 
       pet.petSaveButton().click();
     });
@@ -275,6 +267,18 @@ describe('Test 1 - Login and basic tests', { defaultCommandTimeout: 5000 }, () =
     cy.visit(`/pet/view?pet_id=${petId}`, { failOnStatusCode: false });
 
     cy.get('h1').should('be.visible').should('contain', "Not Found (#404)");
+  });
+
+  it('Check if the user can access the users page', () => {
+    cy.visit(`/user/index`, { failOnStatusCode: false });
+
+    cy.get('h1').should('be.visible').should('contain', "Forbidden (#403)");
+  });
+
+  it('Check if the user can access the vaccines page', () => {
+    cy.visit(`/vaccine/index`, { failOnStatusCode: false });
+
+    cy.get('h1').should('be.visible').should('contain', "Forbidden (#403)");
   });
 
   it('Logout', { retries: { runMode: 1, openMode: 1 } }, () => {
