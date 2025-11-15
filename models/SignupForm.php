@@ -30,7 +30,7 @@ class SignupForm extends Model
             return null;
         }
 
-        if (User::find()->where(['username' => $user->username])->one() == true)
+        if (User::find()->where(['username' => $this->username])->one() == true)
         {
             // \Yii::error(message, "User was not saved!1 ". VarDumper::dumpAsString($user->errors));
             $this->addError($attribute, 'User with the same username already exists! ');

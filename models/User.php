@@ -72,7 +72,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     {
         $scenarios = parent::scenarios();
 
-        if (Yii::$app->user->identity->role === 'admin') {
+        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->role === 'admin') {
             $scenarios['default'] = ['username', 'password', 'role'];
         } else {
             $scenarios['default'] = ['username', 'password'];
