@@ -47,8 +47,8 @@ describe('Test 1 - Login and basic tests', { defaultCommandTimeout: 5000 }, () =
       .should('not.include', '/site/login');
 
     navbar.logout().should('be.visible');
-    navbar.users().should('not.exist');
-    navbar.vaccines().should('not.exist');
+    navbar.users().should('not.exist'); // visible for admins
+    navbar.vaccines().should('not.exist'); // visible for admins
   });
 
   it('Open My Pets menu', () => {
@@ -100,8 +100,8 @@ describe('Test 1 - Login and basic tests', { defaultCommandTimeout: 5000 }, () =
       pet.petAddressInput().should('be.visible').type("Plovdiv");
       pet.petEmailInput().should('be.visible').type(petUserEmail);
       pet.petPhoneNumberInput().should('be.visible').type("0888123456");
-      pet.petOwnerLabelInput().should('not.exist');
-      pet.petSelectUserInput().should('not.exist');
+      pet.petOwnerLabelInput().should('not.exist'); // visible for admins
+      pet.petSelectUserInput().should('not.exist'); // visible for admins
 
       pet.petSaveButton().should('be.visible').click();
     });
@@ -165,7 +165,7 @@ describe('Test 1 - Login and basic tests', { defaultCommandTimeout: 5000 }, () =
       pet.petAddressInput().should('be.visible').should('have.value', "Plovdiv");
       pet.petEmailInput().should('be.visible').should('have.value', petUserEmail);
       pet.petPhoneNumberInput().should('be.visible').should('have.value', "0888123456");
-      pet.petSelectUserInput().should('not.exist');
+      pet.petSelectUserInput().should('not.exist'); // visible for admins
 
       pet.petSaveButton().click();
     });

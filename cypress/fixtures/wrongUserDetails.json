@@ -1,7 +1,7 @@
 [
     {
         "testName": "Try to sign in without a password",
-        "username": "NikolayLN",
+        "username": "AdminCypress",
         "password": null,
         "message": "Password cannot be blank.",
         "secondMessage": null
@@ -22,21 +22,21 @@
     },
     {
         "testName": "Try to sign in with wrong username",
-        "username": "NikolayLN-wrong",
+        "username": "AdminCypress-wrong",
         "password": "parola",
         "message": "Incorrect username or password.",
         "secondMessage": null
     },
     {
         "testName": "Try to sign in with wrong password",
-        "username": "NikolayLN",
+        "username": "AdminCypress",
         "password": "wrongpassword",
         "message": "Incorrect username or password.",
         "secondMessage": null
     },
     {
         "testName": "Try to sign in with wrong and short password",
-        "username": "NikolayLN",
+        "username": "AdminCypress",
         "password": "123",
         "message": "Incorrect username or password.",
         "secondMessage": null

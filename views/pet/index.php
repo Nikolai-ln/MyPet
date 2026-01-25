@@ -13,6 +13,18 @@ use yii\grid\GridView;
 $this->title = 'My Pets';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+    .pet-photo-img {
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .pet-photo-img:hover {
+        transform: scale(1.05);
+        border-color: #007bff;
+    }
+</style>
 <div class="pet-index" data-cy="petIndex-div">
 
     <h1 data-cy="petIndex-title"><?= Html::encode($this->title) ?></h1>
@@ -30,6 +42,23 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             // 'pet_id',
+            [
+                'attribute' => 'Photo',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return Html::a(
+                        Html::img(
+                            Yii::getAlias('@web/' . $model->photo),
+                            [
+                                'class' => 'pet-photo-img', // добавяме клас за ховъра
+                                'style' => 'max-width:150px; max-height:100px;',
+                                'title' => 'View',
+                            ]
+                        ),
+                        ['view', 'pet_id' => $model->pet_id]
+                    );
+                },
+            ],
             'name',
             'type',
             'breed',

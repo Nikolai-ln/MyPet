@@ -1,6 +1,7 @@
 {
-    "username": "NikolayLN",
-    "password": "parola",
+    "username": "AdminCypress",
+    "password": "adminPass1",
     "usernameUser": "UserCypress",
-    "passwordUser": "parola"
+    "passwordUser": "userPass1",
+    "_comment": "// The credentials in the repository are only for testing. For better security, the sensitive data can be moved to environment variables."
 }
