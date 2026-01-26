@@ -4,6 +4,10 @@
 Automated e2e testing of a Yii2-based web application using Cypress.
 The project is designed to work as a pet passport manager, allowing the creation of galleries for them. There are two types of users - an admin who has access to all animals on the platform, can create and edit other users, can add and edit vaccines, and a regular user who can register, to enter data and upload photos for their own pets.
 
+### Demo Videos
+[Watch a demo of the platform usage on Google Drive] (https://drive.google.com/file/d/1LGq6ThAlj6juQwYdIJIO6IZqQ8wTC4Aa/view) <br>
+[Watch a demo of running a Cypress test on Google Drive] (https://drive.google.com/file/d/1BAwki4PYtjj2Z_c4HBFIO7r_7i3B9hww/view)
+
 ### Test Coverage
 - Login & authentication
 - Pet management (CRUD)
@@ -17,6 +21,10 @@ The project is designed to work as a pet passport manager, allowing the creation
 - JavaScript
 - Yii2
 - Git
+
+### Prerequisites:
+- Local PHP server (e.g., WAMP, XAMPP) with MySQL database (accessible via phpMyAdmin)
+- Node.js and npm
 
 ### How to Run Tests
 ```
